@@ -1,0 +1,4 @@
+name = JS Watchdog
+description = Provides Drupal.watchdog() in Javascript to log errors to the database.
+core = 6.x
+dependencies[] = dblog

@@ -1,0 +1,81 @@
+<?php
+/**
+ * @file
+ * Provides Drupal.watchdog() in Javascript to log errors to the database.
+ */
+
+
+/**
+ * Implementation of hook_perm().
+ */
+function jswatchdog_perm() {
+  return array('log messages to watchdog via js');
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function jswatchdog_menu() {
+  $items = array();
+
+  $items['jswatchdog'] = array(
+    'page callback' => 'jswatchdog',
+    'access arguments' => array('log messages to watchdog via js'),
+  );
+
+  return $items;
+}
+
+/**
+ * Menu callback.
+ */
+function jswatchdog() {
+  // Prevent the database being flooded.
+  flood_register_event('jswatchdog');
+  if (flood_is_allowed('jswatchdog', 30)) {
+    // Sanatize the arguments.
+    $params = array();
+    $arguments = array(
+      'type' => 'is_string',
+      'message' => 'is_string',
+      'variables' => 'is_array',
+      'severity' => 'is_numeric',
+      'link' => 'is_string',
+    );
+    foreach ($arguments as $key => $func) {
+      $params[] = (!empty($_POST[$key]) && $func($_POST[$key])) ? $_POST[$key] : NULL;
+    }
+    call_user_func_array('watchdog', $params);
+    
+    // Useful for testing and debugging.
+    // var_export($params);
+  }
+
+  // Do not render any response, whether it got logged or not.
+  return;
+}
+
+/**
+ * Implementation of hook_theme_registry_alter().
+ */
+function jswatchdog_theme_registry_alter(&$registry) {
+  // jswatchdog_preprocess_page() needs to execute before
+  // template_preprocess_page() to add JS at the last minute.
+  $funcs = &$registry['page']['preprocess functions'];
+  $index = array_search('jswatchdog_preprocess_page', $funcs);
+  unset($funcs[$index]);
+  array_unshift($funcs, 'jswatchdog_preprocess_page');
+}
+
+/**
+ * A page preprocess handler to add the jswatchdog.js file.
+ */
+function jswatchdog_preprocess_page(&$variables) {
+  if (user_access('log messages to watchdog via js')) {
+    // Only add JS if there is already some JS on this page.
+    $js = drupal_add_js();
+    if (!empty($js)) {
+      drupal_add_js(drupal_get_path('module', 'jswatchdog') . '/jswatchdog.js');
+    }
+  }
+}
