@@ -27,15 +27,12 @@ Drupal.watchdog = function(type, message, variables, severity, link) {
   }
 
   // Some basic flood control.  The module does this fully.
-  if (Drupal.watchdog.count < Drupal.settings.jswatchdogLimit) {
+  if (Drupal.settings.jswatchdogLimit > 0) {
     jQuery.post(Drupal.settings.basePath + 'jswatchdog', data);
   }
 
-  Drupal.watchdog.count++;
+  Drupal.settings.jswatchdogLimit--;
 };
-
-// Tracks
-Drupal.watchdog.count = 0;
 
 // @see watchdog_severity_levels();
 Drupal.watchdog.EMERG    = 0;

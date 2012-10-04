@@ -32,7 +32,7 @@ function jswatchdog_menu() {
 function jswatchdog() {
   // Prevent the database being flooded.
   flood_register_event('jswatchdog');
-  if (flood_is_allowed('jswatchdog', variable_get('jswatchdog_server_limit'), 30)) {
+  if (flood_is_allowed('jswatchdog', variable_get('jswatchdog_server_limit', 30))) {
     // Sanatize the arguments.
     $params = array();
     $arguments = array(
