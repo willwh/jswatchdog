@@ -32,7 +32,7 @@ function jswatchdog_menu() {
 function jswatchdog() {
   // Prevent the database being flooded.
   flood_register_event('jswatchdog');
-  if (flood_is_allowed('jswatchdog', 30)) {
+  if (flood_is_allowed('jswatchdog', variable_get('jswatchdog_server_limit'), 30)) {
     // Sanatize the arguments.
     $params = array();
     $arguments = array(
@@ -46,7 +46,7 @@ function jswatchdog() {
       $params[] = (!empty($_POST[$key]) && $func($_POST[$key])) ? $_POST[$key] : NULL;
     }
     call_user_func_array('watchdog', $params);
-    
+
     // Useful for testing and debugging.
     // var_export($params);
   }
@@ -76,6 +76,7 @@ function jswatchdog_preprocess_page(&$variables) {
     $js = drupal_add_js();
     if (!empty($js)) {
       drupal_add_js(drupal_get_path('module', 'jswatchdog') . '/jswatchdog.js');
+      drupal_add_js(array('jswatchdogLimit' => variable_get('jswatchdog_client_limit', 3)), 'setting');
     }
   }
 }
