@@ -15,7 +15,7 @@ Drupal.watchdog = function(type, message, variables, severity, link) {
   data = {
     type: 'js:' + type,
     message: message,
-    severity: severity,
+    severity: severity || Drupal.watchdog.NOTICE,
     link: link || window.location.pathname
   };
 
