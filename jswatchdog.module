@@ -8,7 +8,7 @@
 /**
  * Implementation of hook_perm().
  */
-function jswatchdog_perm() {
+function jswatchdog_permission() {
   return array('log messages to watchdog via js');
 }
 
@@ -18,9 +18,10 @@ function jswatchdog_perm() {
 function jswatchdog_menu() {
   $items = array();
 
-  $items['jswatchdog'] = array(
+  $items['ajax/jswatchdog'] = array(
     'page callback' => 'jswatchdog',
     'access arguments' => array('log messages to watchdog via js'),
+    'type' => MENU_CALLBACK,
   );
 
   return $items;
@@ -48,29 +49,14 @@ function jswatchdog() {
     call_user_func_array('watchdog', $params);
 
     // Useful for testing and debugging.
-    // var_export($params);
+    var_export($params);
   }
 
   // Do not render any response, whether it got logged or not.
   return;
 }
 
-/**
- * Implementation of hook_theme_registry_alter().
- */
-function jswatchdog_theme_registry_alter(&$registry) {
-  // jswatchdog_preprocess_page() needs to execute before
-  // template_preprocess_page() to add JS at the last minute.
-  $funcs = &$registry['page']['preprocess functions'];
-  $index = array_search('jswatchdog_preprocess_page', $funcs);
-  unset($funcs[$index]);
-  array_unshift($funcs, 'jswatchdog_preprocess_page');
-}
-
-/**
- * A page preprocess handler to add the jswatchdog.js file.
- */
-function jswatchdog_preprocess_page(&$variables) {
+function jswatchdog_page_alter(&$page) {
   if (user_access('log messages to watchdog via js')) {
     // Only add JS if there is already some JS on this page.
     $js = drupal_add_js();
