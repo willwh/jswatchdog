@@ -6,7 +6,7 @@
 
 
 /**
- * Implementation of hook_perm().
+ * Implementation of hook_permission().
  */
 function jswatchdog_permission() {
   return array('log messages to watchdog via js');
@@ -49,12 +49,16 @@ function jswatchdog() {
     call_user_func_array('watchdog', $params);
 
     // Useful for testing and debugging.
-    var_export($params);
+    // var_export($params);
   }
 
   // Do not render any response, whether it got logged or not.
   return;
 }
+
+/**
+ * Implementation of hook_page_alter().
+ */
 
 function jswatchdog_page_alter(&$page) {
   if (user_access('log messages to watchdog via js')) {
