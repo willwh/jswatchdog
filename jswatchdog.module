@@ -19,7 +19,7 @@ function jswatchdog_menu() {
   $items = array();
 
   $items['ajax/jswatchdog'] = array(
-    'page callback' => 'jswatchdog',
+    'page callback' => 'jswatchdog_menu_callback',
     'access arguments' => array('log messages to watchdog via js'),
     'type' => MENU_CALLBACK,
   );
@@ -30,7 +30,7 @@ function jswatchdog_menu() {
 /**
  * Menu callback.
  */
-function jswatchdog() {
+function jswatchdog_menu_callback() {
   // Prevent the database being flooded.
   flood_register_event('jswatchdog');
   if (flood_is_allowed('jswatchdog', variable_get('jswatchdog_server_limit', 30))) {
