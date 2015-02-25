@@ -9,7 +9,12 @@
  * Implementation of hook_permission().
  */
 function jswatchdog_permission() {
-  return array('log messages to watchdog via js');
+  return array(
+      'log messages to watchdog via js' => array(
+        'title' => t('jswatchdog'),
+        'description' => t('Log messages to watchdog'),
+      ),
+  );
 }
 
 /**
