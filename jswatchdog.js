@@ -5,11 +5,11 @@
  * Log a system message.
  *
  * @see watchdog()
- * @see http://api.drupal.org/api/drupal/includes%21bootstrap.inc/function/watchdog/6
+ * @see https://api.drupal.org/api/drupal/includes%21bootstrap.inc/function/watchdog/7
  *
  * Use Drupal.watchdog.ERROR, Drupal.watchdog.WARNING etc for severity.
  */
-Drupal.watchdog = function(type, message, variables, severity, link) {
+Drupal.watchdog = function (type, message, variables, severity, link) {
   "use strict";
   var data, i;
   data = {
@@ -22,7 +22,7 @@ Drupal.watchdog = function(type, message, variables, severity, link) {
   // Serialize the variables object.
   for (i in variables) {
     if (variables.hasOwnProperty(i)) {
-      data['variables[' + i +']'] = variables[i];
+      data['variables[' + i + ']'] = variables[i];
     }
   }
 

@@ -4,27 +4,26 @@
  * Provides Drupal.watchdog() in Javascript to log errors to the database.
  */
 
-
 /**
- * Implementation of hook_permission().
+ * Implements hook_permission().
  */
 function jswatchdog_permission() {
   return array(
-      'log messages to watchdog via js' => array(
-        'title' => t('jswatchdog'),
-        'description' => t('Log messages to watchdog'),
-      ),
+    'log messages to watchdog via js' => array(
+      'title' => t('jswatchdog'),
+      'description' => t('Log messages to watchdog'),
+    ),
   );
 }
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function jswatchdog_menu() {
   $items = array();
 
   $items['ajax/jswatchdog'] = array(
-    'page callback' => 'jswatchdog_menu_callback',
+    'delivery callback' => 'ajax_deliver',
     'access arguments' => array('log messages to watchdog via js'),
     'type' => MENU_CALLBACK,
   );
@@ -52,9 +51,6 @@ function jswatchdog_menu_callback() {
       $params[] = (!empty($_POST[$key]) && $func($_POST[$key])) ? $_POST[$key] : NULL;
     }
     call_user_func_array('watchdog', $params);
-
-    // Useful for testing and debugging.
-    // var_export($params);
   }
 
   // Do not render any response, whether it got logged or not.
@@ -62,7 +58,7 @@ function jswatchdog_menu_callback() {
 }
 
 /**
- * Implementation of hook_page_alter().
+ * Implements hook_page_alter().
  */
 
 function jswatchdog_page_alter(&$page) {
