@@ -23,6 +23,7 @@ function jswatchdog_menu() {
   $items = array();
 
   $items['ajax/jswatchdog'] = array(
+    'page callback' => 'jswatchdog_menu_callback',
     'delivery callback' => 'ajax_deliver',
     'access arguments' => array('log messages to watchdog via js'),
     'type' => MENU_CALLBACK,
