@@ -43,3 +43,4 @@ Drupal.watchdog.WARNING  = 4;
 Drupal.watchdog.NOTICE   = 5;
 Drupal.watchdog.INFO     = 6;
 Drupal.watchdog.DEBUG    = 7;
+
